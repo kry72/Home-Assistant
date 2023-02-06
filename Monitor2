@@ -1,0 +1,328 @@
+type: custom:stack-in-card
+cards:
+  - type: custom:mushroom-template-card
+    primary: SYSTEM -  {{(states('sensor.ha_update_available'))}}
+    secondary: Home Assistant - {{(states('sensor.ha_update_available'))}}
+    icon: mdi:home-assistant
+    icon_color: '#41bdf5'
+    layout: horizontal
+    tap_action:
+      action: navigate
+      navigation_path: /config/logs
+    card_mod:
+      style: |
+        :host {
+          background: rgba(var(--rgb-primary-text-color), 0.08);
+          --mush-icon-size: 80px;
+          height: 90px;
+          margin-left: -11px !important;
+          margin-top: -20px !important;
+        }
+  - type: custom:stack-in-card
+    mode: horizontal
+    keep:
+      background: true
+      margin: true
+      border_radius: true
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: update.home_assistant_operating_system_update
+        icon: mdi:home-assistant
+        name: HAOS
+        hold_action:
+          action: navigate
+          navigation_path: /config/updates
+        custom_fields:
+          obecna: |
+            [[[
+              return `<span> - <span style='color: var(--text-color-sensor);'>${states['update.home_assistant_operating_system_update'].attributes.installed_version}</span></span>`
+            ]]]
+          dostepna: |
+            [[[
+              return `<span> - <span style='color: var(--text-color-sensor);'>${states['update.home_assistant_operating_system_update'].attributes.latest_version}</span></span>`
+            ]]]
+      - type: custom:mushroom-entity-card
+        entity: update.home_assistant_core_update
+        icon: mdi:home-assistant
+        name: HA Core
+        hold_action:
+          action: navigate
+          navigation_path: /config/updates
+        custom_fields:
+          obecna: |
+            [[[
+              return `<span> - <span style='color: var(--text-color-sensor);'>${states['update.home_assistant_core_update'].attributes.installed_version}</span></span>`
+            ]]]
+          dostepna: |
+            [[[
+              return `<span> - <span style='color: var(--text-color-sensor);'>${states['update.home_assistant_core_update'].attributes.latest_version}</span></span>`
+            ]]]
+      - type: custom:mushroom-entity-card
+        entity: update.home_assistant_supervisor_update
+        icon: mdi:home-assistant
+        name: Supervisor
+        hold_action:
+          action: navigate
+          navigation_path: /config/updates
+        custom_fields:
+          obecna: |
+            [[[
+              return `<span> - <span style='color: var(--text-color-sensor);'>${states['update.home_assistant_supervisor_update'].attributes.installed_version}</span></span>`
+            ]]]
+          dostepna: |
+            [[[
+              return `<span> - <span style='color: var(--text-color-sensor);'>${states['update.home_assistant_supervisor_update'].attributes.latest_version}</span></span>`
+            ]]]
+    card_mod:
+      style: |
+        ha-card {
+          margin-top: 4px;
+          margin-left: 5px;
+          margin-right: 5px;
+          background: transparent;
+        }
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: auto auto
+    cards:
+      - type: custom:stack-in-card
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.glances_cpu_used
+            name: CPU
+            icon_color: '#1ab7ea'
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            card_mod:
+              style: |
+                ha-card {
+                  margin-right: -8px;
+                {
+          - type: custom:mushroom-entity-card
+            entity: sensor.cpu_speed
+            icon_color: '#0084ff'
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            name: CPU
+            card_mod:
+              style: |
+                ha-card {
+                  margin-top: -10px;
+                  margin-right: -8px;
+                }
+          - type: custom:mushroom-entity-card
+            entity: sensor.memory_use_percent
+            icon_color: '#39539E'
+            icon: mdi:memory
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            name: RAM
+            card_mod:
+              style: |
+                ha-card {
+                  margin-top: -10px;
+                  margin-right: -8px;
+                }
+          - type: custom:mushroom-entity-card
+            entity: sensor.disk_use
+            icon_color: '#0077B5'
+            icon: mdi:harddisk
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            name: HDD
+            card_mod:
+              style: |
+                ha-card {
+                  margin-top: -10px;
+                  margin-right: -8px;
+                }
+        card_mod:
+          style: |
+            ha-card {
+              background: none;
+              --ha-card-box-shadow: 0px;
+            }
+      - type: custom:stack-in-card
+        cards:
+          - type: custom:apexcharts-card
+            experimental:
+              color_threshold: true
+            chart_type: radialBar
+            show:
+              loading: false
+            apex_config:
+              chart:
+                height: 270px
+              plotOptions:
+                radialBar:
+                  offsetY: 0
+                  startAngle: -135
+                  endAngle: 135
+                  hollow:
+                    size: 40%
+                  dataLabels:
+                    name:
+                      show: false
+                    value:
+                      show: false
+              legend:
+                show: false
+              stroke:
+                dashArray: 0
+                lineCap: flat
+            series:
+              - entity: sensor.glances_cpu_used
+                type: column
+                name: CPU
+                color_threshold:
+                  - value: 0
+                    color: '#1ab7ea'
+                  - value: 50
+                    color: orange
+                  - value: 80
+                    color: red
+              - entity: sensor.glances_addons_used
+                type: column
+                name: CPU Temp
+                color_threshold:
+                  - value: 0
+                    color: '#0084ff'
+                  - value: 65
+                    color: orange
+                  - value: 85
+                    color: red
+              - entity: sensor.memory_use_percent
+                type: column
+                name: RAM
+                color_threshold:
+                  - value: 0
+                    color: '#39539E'
+                  - value: 65
+                    color: orange
+                  - value: 85
+                    color: red
+              - entity: sensor.disk_use_percent
+                type: column
+                name: HDD
+                color: '#0077B5'
+            card_mod:
+              style: |
+                ha-card {
+                  background: transparent;
+                  margin-top: 20px;
+                }
+          - type: custom:mushroom-entity-card
+            entity: sensor.glances_addons_used
+            primary_info: state
+            secondary_info: name
+            name: encje
+            icon_color: deep-purple
+            layout: vertical
+            card_mod:
+              style: |
+                :host {
+                  --mush-card-primary-font-size: 18px;
+                  --mush-icon-border-radius: 50%;
+                  --mush-icon-size: 72px;
+                }
+                ha-card {
+                  background: transparent;
+                  margin-top: -112px;
+                  width: 120px;
+                  margin-left: auto;
+                  margin-right: auto;
+                }
+  - type: custom:mushroom-chips-card
+    chips:
+      - type: template
+        entity: sensor.ha_update_available
+        content: '{{ states(''sensor.ha_update_available'') }} up'
+        icon: hacs:hacs
+        icon_color: |
+          {% set s1 = states('sensor.hacs') %}
+          {% if (s1 == '0') %}
+            cyan
+          {% else %}
+            red
+          {% endif %}
+        tap_action:
+          action: navigate
+          navigation_path: /hacs
+      - type: template
+        entity: sensor.memory_use
+        icon: mdi:database
+        icon_color: cyan
+        content: '{{ states(''sensor.memory_use'') }} GB'
+        tap_action:
+          action: more-info
+      - type: template
+        entity: sensor.glances_swap_used_percent
+        icon: mdi:content-save
+        icon_color: cyan
+        content: '{{ states(''sensor.glances_swap_used_percent'') }} %'
+        tap_action:
+          action: more-info
+    alignment: center
+  - type: custom:stack-in-card
+    mode: horizontal
+    keep:
+      background: true
+      margin: true
+      border_radius: true
+    cards:
+      - type: custom:button-card
+        tap_action:
+          action: call-service
+          service: homeassistant.restart
+        hold_action:
+          action: navigate
+          navigation_path: /config/server_control
+        name: Restart HA
+        icon: mdi:power
+      - type: custom:button-card
+        tap_action:
+          action: call-service
+          service: hassio.host_reboot
+        name: Restart Host
+        icon: mdi:power
+        lock:
+          enabled:
+            - - - return entity.state === 'on';
+          unlock: hold
+          exemptions:
+            - username: *****
+      - type: custom:button-card
+        tap_action:
+          action: call-service
+          service: hassio.host_shutdown
+        name: Off Host
+        icon: mdi:power
+        lock:
+          enabled:
+            - - - return entity.state === 'on';
+          unlock: hold
+          exemptions:
+            - username: *****
+    card_mod:
+      style: |
+        ha-card {
+          margin-bottom: 5px;
+          margin-left: 5px;
+          margin-right: 5px;
+          background: transparent;
+        }
+card_mod:
+  style: |
+    ha-card {
+      box-shadow: 0px 0px 3px 1px var(--state-icon-color);
+      background: var(--card-background-color)
+    }
