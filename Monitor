@@ -1,0 +1,577 @@
+type: vertical-stack
+cards:
+  - type: custom:layout-card
+    layout_type: grid
+    layout:
+      width: 100%
+    cards:
+      - type: custom:mushroom-template-card
+        primary: >-
+          SYSTEM - 
+          {{(states('sensor.check_home_assistant_configuration_version'))}}
+        secondary: >-
+          Home Assistant -
+          {{(states('sensor.home_assistant_operating_system_newest_version'))}}
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        layout: horizontal
+        tap_action:
+          action: navigate
+          navigation_path: /config/logs
+        card_mod:
+          style: |
+            :host {
+              --mush-icon-size: 60px;
+              --mush-card-primary-font-size: 14px;
+              --mush-card-secondary-font-size: 12px;
+            }
+  - type: custom:layout-card
+    layout_type: grid
+    layout:
+      width: 100%
+      grid-template-columns: 1fr 1fr 1fr 1fr
+    cards:
+      - type: custom:mushroom-template-card
+        entity: update.home_assistant_core_update
+        primary: CORE
+        secondary: |
+          {% if is_state('update.home_assistant_core_update', 'off') %}
+            ***
+          {% else %}
+            {{ state_attr('update.home_assistant_core_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        fill_container: false
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+              margin-top: -10px;
+              --mush-icon-size: 60px;
+              --mush-card-primary-font-size: 12px;
+              --mush-card-secondary-font-size: 10px;
+            }
+            mushroom-shape-icon {
+              --shape-color: none !important; 
+              {% if is_state('update.home_assistant_core_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+      - type: custom:mushroom-template-card
+        primary: Supervisor
+        secondary: |
+          {% if is_state('update.home_assistant_supervisor_update', 'off') %}
+            ***
+          {% else %}
+            {{ state_attr('update.home_assistant_supervisor_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        fill_container: false
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            margin-top: -10px;
+            --mush-icon-size: 60px;
+            --mush-card-primary-font-size: 12px;
+            --mush-card-secondary-font-size: 10px;
+            }
+            mushroom-shape-icon {
+              --shape-color: none !important; 
+              {% if is_state('update.home_assistant_supervisor_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+      - type: custom:mushroom-template-card
+        entity: update.home_assistant_core_update
+        primary: HA OS
+        secondary: >
+          {% if is_state('update.home_assistant_operating_system_update', 'off')
+          %}
+           ***
+          {% else %}
+            {{ state_attr('update.home_assistant_operating_system_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        fill_container: false
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            margin-top: -10px;
+            --mush-icon-size: 60px;
+            --mush-card-primary-font-size: 12px;
+            --mush-card-secondary-font-size: 10px;
+            }
+            mushroom-shape-icon {
+              --shape-color: none !important; 
+              {% if is_state('update.home_assistant_operating_system_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+      - type: custom:mushroom-template-card
+        entity: update.proxmox_ve_update
+        primary: Proxmox
+        secondary: |
+          {% if is_state('update.proxmox_ve_update', 'off') %}
+           ***
+          {% else %}
+            {{ state_attr('update.proxmox_ve_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        fill_container: false
+        icon: mdi:alien
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            margin-top: -10px;
+            --mush-icon-size: 60px;
+            --mush-card-primary-font-size: 12px;
+            --mush-card-secondary-font-size: 10px;
+            }
+            mushroom-shape-icon {
+              --shape-color: none !important; 
+              {% if is_state('update.home_assistant_operating_system_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+  - type: custom:layout-card
+    layout_type: grid
+    layout:
+      width: 100%
+      grid-template-columns: 1fr 1fr 1fr 1fr
+    cards:
+      - type: custom:mushroom-update-card
+        entity: update.mosquitto_broker_update
+        name: Mosquito
+        secondary: |
+          {% if is_state('sensor.ha_update_available', 'off') %}
+            Brak
+          {% else %}
+            {{ state_attr('update.zigbee2mqtt_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        use_entity_picture: true
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 40px;
+            --mush-card-primary-font-size: 11px;
+            --mush-card-secondary-font-size: 9px;
+            }
+            mushroom-shape-icon {
+              {% if is_state('update.zigbee2mqtt_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              height: 120px;
+              }
+      - type: custom:mushroom-update-card
+        entity: update.matter_server_update
+        name: Matter
+        secondary: |
+          {% if is_state('sensor.ha_update_available', 'off') %}
+            Brak
+          {% else %}
+            {{ state_attr('update.zigbee2mqtt_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        use_entity_picture: true
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 40px;
+            --mush-card-primary-font-size: 11px;
+            --mush-card-secondary-font-size: 9px;
+            }
+            mushroom-shape-icon {
+              {% if is_state('update.zigbee2mqtt_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              height: 120px;
+              }
+      - type: custom:mushroom-update-card
+        entity: update.duck_dns_update
+        name: DuckDns
+        secondary: |
+          {% if is_state('sensor.ha_update_available', 'off') %}
+            Brak
+          {% else %}
+            {{ state_attr('update.zigbee2mqtt_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        use_entity_picture: true
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 40px;
+            --mush-card-primary-font-size: 11px;
+            --mush-card-secondary-font-size: 9px;
+            }
+            mushroom-shape-icon {
+              {% if is_state('update.zigbee2mqtt_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              height: 120px;
+              }
+      - type: custom:mushroom-update-card
+        entity: update.deconz_update
+        name: Deconz
+        secondary: |
+          {% if is_state('sensor.ha_update_available', 'off') %}
+            Brak
+          {% else %}
+            {{ state_attr('update.zigbee2mqtt_update', 'latest_version') }}
+          {% endif %}
+        layout: vertical
+        use_entity_picture: true
+        icon: mdi:home-assistant
+        icon_color: '#41bdf5'
+        secondary_info: state
+        multiline_secondary: true
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 40px;
+            --mush-card-primary-font-size: 11px;
+            --mush-card-secondary-font-size: 9px;
+            }
+
+            mushroom-shape-icon {
+              {% if is_state('update.zigbee2mqtt_update', 'on') %}
+                 animation: blink 1s linear infinite;
+              {% endif %}
+            }
+            @keyframes blink {
+              30% {opacity: 0;}
+            }
+            ha-card {
+              height: 120px;
+              }
+    card_mod:
+      style: |
+        ha-card {
+          height: 150px;
+        }
+  - type: custom:layout-card
+    layout_type: grid
+    layout:
+      width: 100%
+      grid-template-columns: 1fr 2fr
+      grid-template-rows: auto
+      margin: 0px
+      padding: 0px
+    cards:
+      - type: custom:stack-in-card
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.casa_realfeel_temperature
+            icon_color: '#0084ff'
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            name: CPU
+            card_mod:
+              style: |
+                ha-card {
+                  margin-top: -10px;
+                  margin-right: -8px;
+                }
+          - type: custom:mushroom-entity-card
+            entity: sensor.memory_use_percent
+            icon_color: '#39539E'
+            icon: mdi:memory
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            name: RAM
+            card_mod:
+              style: |
+                ha-card {
+                  margin-top: -10px;
+                  margin-right: -8px;
+                }
+          - type: custom:mushroom-entity-card
+            entity: sensor.disk_use_percent
+            icon_color: '#0077B5'
+            icon: mdi:harddisk
+            hold_action:
+              action: none
+            primary_info: name
+            secondary_info: state
+            name: HDD
+            card_mod:
+              style: |
+                ha-card {
+                  margin-top: -10px;
+                  margin-right: -8px;
+                }
+        card_mod:
+          style: |
+            ha-card {
+              background: none;
+              --ha-card-box-shadow: 0px;
+            }
+      - type: custom:stack-in-card
+        cards:
+          - type: custom:apexcharts-card
+            experimental:
+              color_threshold: true
+            chart_type: radialBar
+            show:
+              loading: false
+            apex_config:
+              chart:
+                height: 270px
+              plotOptions:
+                radialBar:
+                  offsetY: -25
+                  startAngle: -135
+                  endAngle: 135
+                  hollow:
+                    size: 45%
+                  dataLabels:
+                    name:
+                      show: false
+                    value:
+                      show: false
+              legend:
+                show: false
+              stroke:
+                dashArray: 0
+                lineCap: flat
+            series:
+              - entity: sensor.openclose_30_temperature
+                type: column
+                name: CPU Temp
+                color_threshold:
+                  - value: 0
+                    color: '#0084ff'
+                  - value: 55
+                    color: orange
+                  - value: 60
+                    color: red
+              - entity: sensor.memory_use_percent
+                type: column
+                name: RAM
+                color_threshold:
+                  - value: 0
+                    color: '#39539E'
+                  - value: 65
+                    color: orange
+                  - value: 85
+                    color: red
+              - entity: sensor.disk_use_percent
+                type: column
+                name: HDD
+                color: '#0077B5'
+            card_mod:
+              style: |
+                ha-card {
+                  background: none;
+                  --ha-card-box-shadow: 0px;
+                }
+          - type: custom:mushroom-template-card
+            entity: sensor.rpi_power_status
+            primary: RPI
+            icon_color: deep-purple
+            icon: mdi:raspberry-pi
+            layout: vertical
+            card_mod:
+              style: |
+                :host {
+                  --mush-card-primary-font-size: 13px;
+                  --mush-icon-border-radius: 50%;
+                  --mush-icon-size: 72px;
+                }
+                ha-card {
+                  background: transparent;
+                  margin-top: -112px;
+                  width: 120px;
+                  margin-left: auto;
+                  margin-right: auto;
+                }
+  - type: custom:layout-card
+    layout_type: grid
+    layout:
+      width: 100%
+      grid-template-columns: 1fr 1fr 1fr
+      grid-template-rows: auto
+      margin: 0px
+      padding: 0px
+    cards:
+      - type: custom:mushroom-template-card
+        icon: mdi:home-import-outline
+        layout: vertical
+        primary: HA Restart
+        icon_color: purple
+        tap_action:
+          action: call-service
+          confirmation:
+            text: Vuoi riavviare Home Assistant ?
+          service: homeassistant.restart
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 45px;
+            --mush-card-primary-font-size: 12px;
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+      - type: custom:mushroom-template-card
+        icon: mdi:raspberry-pi
+        layout: vertical
+        primary: RPI Restart
+        icon_color: purple
+        tap_action:
+          action: call-service
+          confirmation:
+            text: Vuoi riavviare RASPBERRY?
+          service: hassio.host_reboot
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 45px;
+            --mush-card-primary-font-size: 12px;
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+      - type: custom:mushroom-template-card
+        icon: mdi:robot-excited
+        layout: vertical
+        primary: Automation
+        icon_color: purple
+        tap_action:
+          action: call-service
+          confirmation:
+            text: Vuoi ricare le automazioni ?
+          service: automation.reload
+        card_mod:
+          style: |
+            :host {
+            --mush-icon-size: 45px;
+            --mush-card-primary-font-size: 12px;
+            }
+            ha-card {
+              padding-top: 5px !important;
+              padding-bottom: 5px !important;
+            }
+  - type: custom:layout-card
+    layout_type: grid
+    layout:
+      width: 100%
+      grid-template-columns: 1fr 4fr
+      grid-template-rows: auto
+      margin: 0px
+      padding: 0px
+    cards:
+      - type: custom:mushroom-entity-card
+        icon: mdi:robot-excited
+        name: Proxmox
+        entity: binary_sensor.proxmox_haosova_7_0_100_status
+      - type: custom:mushroom-entity-card
+        entity: binary_sensor.internet_on
+        name: Rete Internet
+        icon: mdi:access-point
+        icon_color: teal
+        primary: Access Point
+        card_mod:
+          style:
+            mushroom-shape-icon$: >
+              ha-icon {
+                {{ '--icon-animation: clip 1.5s infinite;' if is_state(config.entity, 'on') }}
+              }
+
+              @keyframes clip {
+                0% { clip-path: circle(13.0% at 50% 50%); }
+                100% { clip-path: circle(50.0% at 50% 50%); }
+              }
+
+              .shape {
+
+              {{ '--shape-animation: ping 1.5s infinite;' if
+              is_state(config.entity, 'on') }}
+
+              }
+
+              @keyframes ping {
+                0% { box-shadow: 0 0 1px 1px rgba(var(--rgb-teal), 0.3) inset; }
+                50% { box-shadow: 0 0 5px 15px transparent inset; }
+                51% { box-shadow: 0 0 1px 1px rgba(var(--rgb-teal), 0.3); }
+                100% { box-shadow: 0 0 5px 15px transparent; }
+              }
